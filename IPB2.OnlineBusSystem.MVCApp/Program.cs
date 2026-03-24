@@ -1,4 +1,8 @@
 using IPB2.OnlineBusSystem.Database.AppDbContextModels;
+using IPB2.OnlineBusSystem.MVCApp.Services.Booking;
+using IPB2.OnlineBusSystem.MVCApp.Services.Bus;
+using IPB2.OnlineBusSystem.MVCApp.Services.Route;
+using IPB2.OnlineBusSystem.MVCApp.Services.Schedule;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -11,7 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+builder.Services.AddScoped<IBusService, BusService>();
+builder.Services.AddScoped<IRouteService, RouteService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

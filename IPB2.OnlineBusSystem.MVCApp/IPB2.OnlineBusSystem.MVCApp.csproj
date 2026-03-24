@@ -7,13 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Dapper" Version="2.1.66" />
     <ProjectReference Include="..\IPB2.OnlineBusSystem.Database\IPB2.OnlineBusSystem.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\" />
-    <Folder Include="Services\Booking\" />
-    <Folder Include="Services\Schedule\" />
   </ItemGroup>
 
 </Project>
