@@ -10,7 +10,7 @@ namespace IPB2.OnlineBusSystem.MVCApp.Common
             DataSource = ".",
             InitialCatalog = "IPB2_OnlineBusBooking",
             UserID = "sa",
-            Password = "sasa@123",
+            Password = "system",
             TrustServerCertificate = true,
         };
 
