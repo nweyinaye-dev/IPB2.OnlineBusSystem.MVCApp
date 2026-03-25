@@ -21,8 +21,8 @@ namespace IPB2.OnlineBusSystem.MVCApp.Services.Schedule
             var Schedule = await _db.TblSchedules
                 .Where(x => !x.IsDelete)
                 .OrderByDescending(x => x.Date)
-                //.Skip((pageNo - 1) * pageSize)
-                // .Take(pageSize)
+                .Skip((pageNo - 1) * pageSize)
+                 .Take(pageSize)
                 .Select(x => new ScheduleResponse
                 {
                     Id = x.Id,

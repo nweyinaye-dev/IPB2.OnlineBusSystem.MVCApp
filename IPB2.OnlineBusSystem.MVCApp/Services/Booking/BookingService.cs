@@ -62,13 +62,13 @@ namespace IPB2.OnlineBusSystem.MVCApp.Services.Booking
                 return new ServiceResponse { Status = ResponseType.None, Message = "One or more Seat numbers are invalid for this schedule." };
 
 
-            //var alreadyBooked = await _db.TblBooks
-            //    .Where(x => x.ScheduleId == request.ScheduleId && !x.IsDelete && requestedSeats.Contains(x.Seatno))
-            //    .Select(x => x.Seatno)
-            //    .ToListAsync();
+            var alreadyBooked = await _db.TblBooks
+                .Where(x => x.ScheduleId == request.ScheduleId && !x.IsDelete && requestedSeats.Contains(x.Seatno))
+                .Select(x => x.Seatno)
+                .ToListAsync();
 
-            //if (alreadyBooked.Any())
-            //    return new ServiceResponse { Status = ResponseType.AlreadyExists, Message = $"Seats already taken: {string.Join(", ", alreadyBooked)}" };
+            if (alreadyBooked.Any())
+                return new ServiceResponse { Status = ResponseType.AlreadyExists, Message = $"Seats already taken: {string.Join(", ", alreadyBooked)}" };
 
             // 4. Bulk Add Bookings
             var bookings = request.Passengers.Select(p => new TblBook
