@@ -1,4 +1,4 @@
-﻿namespace IPB2.OnlineBusSystem.MVCApp.Models;
+namespace IPB2.OnlineBusSystem.MVCApp.Models;
 
 public class SearchBusRequest
 {
@@ -43,6 +43,7 @@ public class BookingDetailResponse
 }
 public class BookingDetailModel
 {
+    public string Id { get; set; }
     public DateTime TravelDate { get; set; }
     public string BookedArrivalTime { get; set; }
     public string BookedDepartureTime { get; set; }

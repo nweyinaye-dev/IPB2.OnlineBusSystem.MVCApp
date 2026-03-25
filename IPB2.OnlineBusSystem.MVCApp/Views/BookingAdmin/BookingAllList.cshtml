@@ -1,0 +1,126 @@
+@model IPB2.OnlineBusSystem.MVCApp.Models.BookingDetailResponse
+
+@{
+    ViewData["Title"] = "All Bookings";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container-fluid py-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">All User Bookings</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="BookingAllList" method="get" class="mb-4">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="txtBkSearch" class="col-form-label">Filter:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="txtBkSearch" id="txtBkSearch" class="form-control" placeholder="Search by Username, Bus No, or Bus Name..." value="@Context.Request.Query["txtBkSearch"]">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <a asp-action="BookingAllList" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Travel Date</th>
+                            <th>Username</th>
+                            <th>Phone</th>
+                            <th>Bus Info</th>
+                            <th>Route</th>
+                            <th>Seat</th>
+                            <th>Fare</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.bookings != null && Model.bookings.Any())
+                        {
+                            foreach (var item in Model.bookings)
+                            {
+                                <tr>
+                                    <td>@item.TravelDate.ToShortDateString()</td>
+                                    <td>@item.Username</td>
+                                    <td>@item.Phoneno</td>
+                                    <td>
+                                        <strong>@item.BookedBusName</strong><br />
+                                        <small class="text-muted">@item.BookedBusNo (@item.BookedBusType)</small>
+                                    </td>
+                                    <td>
+                                        @item.BookedOrigin <i class="fa-solid fa-arrow-right mx-1"></i> @item.BookedDestination<br />
+                                        <small class="text-muted">@item.BookedDepartureTime - @item.BookedArrivalTime</small>
+                                    </td>
+                                    <td><span class="badge bg-info text-dark">@item.SeatNo</span></td>
+                                    <td>@item.BookedFare.ToString("C")</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm cancel-booking" data-id="@item.Id">
+                                            <i class="fa-solid fa-trash"></i> Cancel
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center py-4">No bookings found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $('.cancel-booking').on('click', function () {
+                var bookingId = $(this).data('id');
+                var row = $(this).closest('tr');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, cancel it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post('/Booking/Cancel', { id: bookingId }, function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Cancelled!',
+                                    response.message,
+                                    'success'
+                                );
+                                row.fadeOut(500, function() { $(this).remove(); });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

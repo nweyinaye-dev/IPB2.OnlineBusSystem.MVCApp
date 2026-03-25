@@ -67,5 +67,6 @@ namespace IPB2.OnlineBusSystem.MVCApp.Controllers
             var result = await _scheduleService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

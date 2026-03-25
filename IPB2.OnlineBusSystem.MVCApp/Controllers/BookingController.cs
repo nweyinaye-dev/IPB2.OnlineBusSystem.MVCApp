@@ -1,4 +1,4 @@
-﻿using IPB2.OnlineBusSystem.MVCApp.Models;
+using IPB2.OnlineBusSystem.MVCApp.Models;
 using IPB2.OnlineBusSystem.MVCApp.Services.Booking;
 using IPB2.OnlineBusSystem.MVCApp.Services.Bus;
 using IPB2.OnlineBusSystem.MVCApp.Services.Route;
@@ -77,6 +77,17 @@ namespace IPB2.OnlineBusSystem.MVCApp.Controllers
                 response = await _bookingService.GetBookingDetailByUserAsync(username, phoneno);
             }
             return View(response);
+        }
+       
+        [HttpPost]
+        public async Task<IActionResult> Cancel(string id)
+        {
+            var result = await _bookingService.CancelAsync(id);
+            if (result.Status == Common.ResponseType.Success)
+            {
+                return Json(new { success = true, message = result.Message });
+            }
+            return Json(new { success = false, message = result.Message });
         }
     }
 }
